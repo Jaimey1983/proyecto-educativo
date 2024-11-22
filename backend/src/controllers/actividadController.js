@@ -11,11 +11,9 @@ try {
     }
 
     // Verificar que req.user esté definido
-    if (!req.user || !req.user.id) {
+    if (!req.createdBy) {
       return res.status(401).json({ message: 'Usuario no autenticado.' });
     }
-
-    const createdBy = req.user.id; // suponiendo que tienes un middleware de autenticación
 
     // Crea el quiz con el campo `createdBy`
     const actividad = await Actividadd.create({
@@ -23,7 +21,7 @@ try {
         descripcion,
         datos,
         tipo,
-        createdBy: req.user.id, // ID del usuario autenticado
+        createdBy: req.createdBy, // ID del usuario autenticado
       });
 
     const savedActividad = await actividad.save();
@@ -73,7 +71,7 @@ const getActividad = async (req, res) => {
 
   const listActivities = async (req, res) => {
     try {
-        const actividades = await Actividadd.find({ createdBy: req.user.id });
+        const actividades = await Actividadd.find({ createdBy: req.createdBy });
         res.status(200).json(actividades);
     } catch (error) {
         console.error('Error al listar actividades:', error);
@@ -102,7 +100,7 @@ const updateActivities = async (req, res) => {
 
   try {
       const updatedActivity = await Actividadd.findOneAndUpdate(
-          { _id: id, createBy: req.createBY }, // Verificar que la actividad pertenece al usuario autenticado
+          { _id: id, createdBy: req.createdBY }, // Verificar que la actividad pertenece al usuario autenticado
           { nombre, tipo, descripcion, datos },
           { new: true } // Retorna el documento actualizado
       );
@@ -121,11 +119,11 @@ const updateActivities = async (req, res) => {
 // Eliminar una actividad
 const deleteActivity = async (req, res) => {
   const { id } = req.params;
-  const { nombre, tipo, descripcion, datos } = req.body;
+  //const { nombre, tipo, descripcion, datos } = req.body;
 
   try {
       const activityDeleted = await Actividadd.findOneAndDelete(
-        { _id: id, createBy: req.createBY }, // Verificar que la actividad pertenece al usuario autenticado
+        { _id: id, createdBy: req.createBY }, // Verificar que la actividad pertenece al usuario autenticado
        
        
       );

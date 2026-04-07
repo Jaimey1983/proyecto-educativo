@@ -13,6 +13,7 @@ const authenticate = async (req, res, next) => {
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.createdBy = decoded.id; // Añade los datos del usuario al objeto `req`
+    req.user = decoded; // Necesario para authorizeRoles y getUserProfile
     next(); // Permite que la solicitud continúe
   } catch (error) {
     console.error('Error de autenticación:', error);

@@ -100,7 +100,7 @@ const updateActivities = async (req, res) => {
 
   try {
       const updatedActivity = await Actividadd.findOneAndUpdate(
-          { _id: id, createdBy: req.createdBY }, // Verificar que la actividad pertenece al usuario autenticado
+          { _id: id, createdBy: req.createdBy }, // Verificar que la actividad pertenece al usuario autenticado
           { nombre, tipo, descripcion, datos },
           { new: true } // Retorna el documento actualizado
       );
@@ -123,7 +123,7 @@ const deleteActivity = async (req, res) => {
 
   try {
       const activityDeleted = await Actividadd.findOneAndDelete(
-        { _id: id, createdBy: req.createBY }, // Verificar que la actividad pertenece al usuario autenticado
+        { _id: id, createdBy: req.createdBy }, // Verificar que la actividad pertenece al usuario autenticado
        
        
       );
